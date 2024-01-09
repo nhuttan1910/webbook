@@ -1,0 +1,35 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Chi Tiết Sản Phẩm{% endblock %}
+
+{% block content %}
+<div class="info" style="width: 50%; height : 50%; margin : auto">
+<h1 class="text-center">Chi Tiết Sản Phẩm</h1>
+<div class="row center-content">
+        {% for p in sach_profile %}
+        <div style="padding: 8px;">
+            <div class="card">
+                <img class="card-img-top" src="{{ p.image }}" alt="Card image" style="width: 500px; height:auto; margin:10px auto">
+                <div class="card-body">
+                    <h4 class="card-title">Tên sách: {{ p.name }}</h4>
+                    {% for x in tacgia_profile %}
+                    <h4 class="card-title"> Tác Giả: {{ x.name }}</h4>
+                    {% endfor %}
+                    {% for c in theloai_profile %}
+                    <h4 class="card-title"> Thể loại: {{ c.name }}</h4>
+                    {% endfor %}
+                    {% for n in nxb_profile %}
+                    <h4 class="card-title"> Nhà Xuất Bản: {{ n.name }}</h4>
+                    {% endfor %}
+                    <p class="card-text">Mô tả: {{ p.sach_info }}</p>
+                    <h4 class="card-text">Giá: {{ p.price }} VNĐ</h4>
+                    <div class="d-flex justify-content-center">
+                    <a href="javascript:;" class="btn btn-danger" onclick="addToCart({{p.id}}, '{{p.name}}', {{p.price}})">Đặt hàng</a>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

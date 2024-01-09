@@ -1,0 +1,74 @@
+{% extends 'nv/base.html' %}
+
+{% block title %}Add{% endblock %}
+
+{% block content %}
+{% if current_user.is_authenticated and current_user.role.__eq__(r) %}
+<div class="row">
+
+    <div class="col-md-5 col-xs-12">
+        <form action="{{url_for('nvCr')}}" method="post" class="mt-5">
+            <div class="form-group">
+                <label for="mavach">Nhap ma id sach</label>
+                <input class="form-control" type="text" name="mavach" id="mavach">
+            </div>
+
+            <input type="submit" class="btn btn-danger mt-3" value="Scan">
+        </form>
+        <a href="javascript:;" class="btn btn-danger mt-3" onclick="addToViewtt({{s.id}}, '{{s.name}}',{{s.price}})">Xac Nhan</a>
+    </div>
+
+    <div class="col-md-5 col-xs-12">
+        <h1 class="text-center">Man hinh thanh toan</h1>
+        {% if 'viewtt' in session and session['viewtt'] %}
+        <table class="table">
+            <tr>
+                <th>Ten</th>
+                <th>Gia</th>
+                <th>So Luong</th>
+            </tr>
+            {% for c in session['viewtt'].values() %}
+            <tr>
+                <td>{{c.name}}</td>
+                <td>{{c.price}}</td>
+                <td>{{c.quantity}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="alert alert-info">
+            <h5>Tong san pham: {{ stats.total_quantity}}</h5>
+            <h5>Tong tien: {{ stats.total_amount}} VND</h5>
+        </div>
+
+<!--        <input class="form-control" type="number" name="tienthu" id="tienthu" placeholder="Nhap tien">-->
+<!--        <a href="javascript:void(0)" class="btn btn-danger mt-3" onclick="calcTien({{(stats.total_amount)}})">Nhan</a>-->
+<!--        <div class="alert alert-info" id="hienthi"></div>-->
+
+
+<!--        <script>-->
+<!--            function calcTien(x){-->
+<!--                var tienHd = parseInt(x.value);-->
+<!--                var tienthu = document.getElementById('tienthu');-->
+<!--                var tien = parseInt(tienthu.value);-->
+
+<!--                var tienhoan = tienHd - tien-->
+<!--                kq = parseInt(tienhoan.value)-->
+<!--                hienthi('Tien hoan: ' + tienhoan);-->
+<!--            }-->
+<!--            function hienthi(m) {-->
+
+<!--                var kq = document.getElementById('hienthi');-->
+
+<!--                kq.innerHTML = m;-->
+<!--            }-->
+<!--        </script>-->
+        <input type="button" value="Thanh Toan" class="btn btn-danger" onclick="pay_nv()">
+        {% else %}
+        <p>No book</p>
+        {% endif %}
+
+
+    </div>
+</div>
+{% endif %}
+{% endblock %}

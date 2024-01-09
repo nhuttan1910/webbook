@@ -1,0 +1,66 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Thông Tin Chi Tiết{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center mt-1">Thông Tin Chi Tiết</h1>
+<table class="table">
+    <tr>
+        <td class="fw-bold">Khách Hàng</td>
+        <td>{{ info_user[0].name }}</td>
+    </tr>
+    <tr>
+        <td class="fw-bold">Số điện thoại</td>
+        <td>{{ info_user[0].sdt }}</td>
+    </tr>
+    <tr>
+        <td class="fw-bold">Email</td>
+        <td>{{ info_user[0].email }}</td>
+    </tr>
+    <tr>
+        <td class="fw-bold">Địa Chỉ</td>
+        <td>{{ info_user[0].diachi }}</td>
+    </tr>
+</table>
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Tên sách</th>
+        <th>Đơn giá</th>
+        <th>Số lượng</th>
+        <th>Thành tiền</th>
+    </tr>
+    {% for c in cthd %}
+    <tr>
+        <td>{{ c.sach_id }}</td>
+        {% for p in sach_info %}
+        {% if c.sach_id == p.id %}
+        <td>{{ p.name }}</td>
+        {% endif %}
+        {% endfor %}
+        <td>{{ "{:,.0f}".format(c.price) }}</td>
+        <td>{{ c.quantity }}</td>
+        <td>{{ "{:,.0f}".format((c.quantity)*(c.price)) }} VNĐ</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<div class="alert alert-info">
+    <h3>Tổng sản phẩm: <span class="cart-counter">{{ total_quanti }}</span></h3>
+    <h3>Tổng tiền: <span class="cart-counter">{{ "{:,.0f}".format(total_sum)}} VNĐ</span></h3>
+    {% if hd_info[0].thanhtoan == 1 %}
+    <h3>Trạng Thái: <span class="cart-counter">Đã thanh toán</span></h3>
+    {% else %}
+    <h3>Trạng Thái: <span class="cart-counter">Chưa thanh toán</span></h3>
+    <p>Vui lòng đến nhà sách thanh toán trước ngày <span>{{ ngay_thanh_toan }}</span></p>
+    {% endif %}
+</div>
+
+<div style ="display:flex; justify-content: center">
+    <button class="btn btn-warning" style="margin-right : 10px">
+        <a class = "nav-link text-light" style="text-decoration:none" href="/userinfo">Xem xong</a>
+    </button>
+</div>
+
+{% endblock %}

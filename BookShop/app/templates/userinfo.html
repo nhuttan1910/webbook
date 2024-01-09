@@ -1,0 +1,52 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Tài Khoản{% endblock %}
+
+{% block content %}
+<h1 class="text-center mt-1">Thông Tin Tài Khoản</h1>
+<table class="table">
+    <tr>
+        <td class="fw-bold">Khách Hàng</td>
+        <td>{{ info_user[0].name }}</td>
+    </tr>
+    <tr>
+        <td class="fw-bold">Số điện thoại</td>
+        <td>{{ info_user[0].sdt }}</td>
+    </tr>
+    <tr>
+        <td class="fw-bold">Email</td>
+        <td>{{ info_user[0].email }}</td>
+    </tr>
+    <tr>
+        <td class="fw-bold">Địa Chỉ</td>
+        <td>{{ info_user[0].diachi }}</td>
+    </tr>
+    <tr>
+        <td class="fw-bold">Ngày đăng ký</td>
+        <td>{{ tk[0].join_date }}</td>
+    </tr>
+</table>
+<table class="table">
+    <tr>
+        <th>Mã hóa đơn</th>
+        <th>Mã khách hàng</th>
+        <th>Ngày đặt</th>
+        <th>Trạng thái</th>
+        <th></th>
+    </tr>
+    {% for n in hd %}
+    <tr>
+        <td>{{ n.id }}</td>
+        <td>{{ n.kh_id }}</td>
+        <td>{{ n.ngay }}</td>
+        {% if n.thanhtoan == 1 %}
+        <td>Đã thanh toán</td>
+        {% else %}
+        <td>Chưa thanh toán</td>
+        {% endif %}
+        <td><a href="/hd/{{n.id}}" class="btn btn-success" style="text-decoration: none">Xem chi tiết</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

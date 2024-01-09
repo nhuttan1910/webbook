@@ -1,0 +1,93 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+<h1 class="text-center text-danger">Thong ke</h1>
+
+<div class="row">
+    <div class="col-md-5 col-xs-12">
+        <table class="table">
+            <tr>
+                <th>Type book</th>
+                <th>Month</th>
+                <th>Revenue</th>
+            </tr>
+            {% for tl, m, r in stats %}
+            <tr>
+                <td>{{ tl.name }}</td>
+                <td>{{ m }}</td>
+                <td>
+                    {% if r %}
+                    {{r}} VND
+                    {% else %}
+                    0 VND
+                    {% endif %}
+                </td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="col-md-5 col-xs-12">
+        <form>
+            <div class="form-group">
+                <input type="text" class="form-control" name="type" placeholder="Typing type of book">
+            </div>
+            <input type="submit" class="btn btn-info mt-3" value="Stats">
+        </form>
+        <canvas id="MonthChart"></canvas>
+
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let labels=[][]
+    let info=[]
+    let r,g,b
+    let colors=[]
+    let borderColors=[]
+
+    {% for tl, m, r in stats %}
+    {% if r %}
+        labels.push('{{ m }}')
+        info.push({{r}})
+
+        r = Math.random()*255
+        g = Math.random()*255
+        b = Math.random()*255
+
+        colors.push(`rgba(${r},${g},${b}, 0.3)`)
+        borderColors.push(`rgba(${r},${g},${b}, 1)`)
+    {% endif %}
+    {% endfor %}
+    window.onload = function() {
+        const ctx = document.getElementById('MonthChart').getContext('2d');
+        loadChart(ctx, labels, info, 'bar', colors, borderColors, 'Month Revenue')
+    }
+
+
+function loadChart(ctx, labels, info, type, colors, borderColors, label){
+    new Chart(ctx, {
+            type: type,
+            data: {
+                labels: labels,
+
+                datasets: [{
+                    label: label,
+                    data: info,
+                    backgroundColor: colors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+}
+</script>
+{% endblock %}

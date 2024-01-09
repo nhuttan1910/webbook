@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">BOOKSTORE</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Home</a>
+                </li>
+                {% for c in theloai %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/?theloai_id={{c.id}}">{{ c.name }}</a>
+                </li>
+                {% endfor %}
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-info" href="/userinfo">
+                        {% if current_user.avatar %}
+                        <img src="{{ current_user.avatar }}" alt="current_user.username" width="30" class="rounded-circle">
+                        {% else %}
+                        <img class="rounded-circle" width="30" src="https://res.cloudinary.com/diwrqtpmf/image/upload/v1704372094/icon-5359553_640_kanhti.png" alt="current_user.username">
+                        {% endif %}
+                        {{ current_user.username }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-success" href="{{ url_for('logoutTk')}}">Log out</a>
+                </li>
+                {%  else %}
+                <li class="nav-item">
+                    <a class="nav-link text-info" href="{{ url_for('signin')}}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-success" href="{{ url_for('register')}}">Register</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="/cart">&#128722; Giỏ hàng <span class="badge bg-danger cart-counter">{{ cart.total_quantity }}</span></a>
+                </li>
+            </ul>
+
+            <form class="d-flex" method="get" action="/">
+                <input class="form-control me-2" type="text" name="kw" placeholder="Nhập từ khóa...">
+                <button class="btn btn-primary" type="submit">Tìm</button>
+            </form>
+        </div>
+    </div>
+</nav>

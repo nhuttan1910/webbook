@@ -1,0 +1,62 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Thông Tin Đặt Hàng{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center mt-1">Thông Tin Đặt Hàng</h1>
+<table class="table">
+    <tr>
+        <td class="fw-bold">Khách Hàng</td>
+        <td>{{ info_user[0].name }}</td>
+    </tr>
+    <tr>
+        <td class="fw-bold">Số điện thoại</td>
+        <td>{{ info_user[0].sdt }}</td>
+    </tr>
+    <tr>
+        <td class="fw-bold">Email</td>
+        <td>{{ info_user[0].email }}</td>
+    </tr>
+    <tr>
+        <td class="fw-bold">Địa Chỉ</td>
+        <td>{{ info_user[0].diachi }}</td>
+    </tr>
+</table>
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Tên sản phẩm</th>
+        <th>Đơn giá</th>
+        <th>Số lượng</th>
+        <th>Thành tiền</th>
+    </tr>
+    {% for c in session['cart'].values() %}
+    <tr id="sach{{c.id}}">
+        <td>{{ c.id }}</td>
+        <td>{{ c.name }}</td>
+        <td>{{ "{:,.0f}".format(c.price) }}</td>
+        <td>{{ c.quantity }}</td>
+        <td>{{ "{:,.0f}".format((c.quantity)*(c.price)) }} VNĐ</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<div class="alert alert-info">
+    <h3>Tổng sản phẩm: <span class="cart-counter">{{ cart.total_quantity }}</span></h3>
+    <h3>Tổng tiền: <span class="cart-amount">{{ "{:,.0f}".format((cart.total_amount)) }} </span> VNĐ</h3>
+</div>
+
+<div style ="display:flex; justify-content: center">
+    <button class="btn btn-warning" style="margin-right : 10px">
+        <a class = "nav-link text-light" style="text-decoration:none" href="/cart" onclick="pay()">Thanh toán trực tiếp</a>
+    </button>
+    <button class="btn btn-danger" style="margin-right : 10px">
+        <a class = "nav-link text-light" style="text-decoration:none" href="/cart" onclick="pay_online()">Thanh toán trực tuyến</a>
+    </button>
+    <button class="btn btn-success">
+        <a class = "nav-link text-light" style="text-decoration:none" href="/cart">Hủy</a>
+    </button>
+</div>
+
+{% endblock %}

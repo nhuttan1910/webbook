@@ -1,0 +1,85 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+<h1>Welcome {{ current_user.username }} to administrator website </h1>
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Ten</th>
+
+    </tr>
+    {% for tl, sach in stats %}
+    <tr>
+        <td>{{tl.id}}</td>
+        <td>{{tl.name}}</td>
+        <td>{{sach}}</td>
+    </tr>
+    {% endfor %}
+</table>
+<div>
+    <canvas id="TheLoaiChart"></canvas>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let labels=[]
+    let info=[]
+    let r,g,b
+    let colors=[]
+    let borderColors=[]
+
+    {% for tl, sach in stats %}
+        labels.push('{{ tl.name }}')
+        info.push({{sach}})
+
+        r = Math.random()*255
+        g = Math.random()*255
+        b = Math.random()*255
+
+        colors.push(`rgba(${r},${g},${b}, 0.3)`)
+        borderColors.push(`rgba(${r},${g},${b}, 1)`)
+    {% endfor %}
+    window.onload = function() {
+        const ctx = document.getElementById('TheLoaiChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+
+                datasets: [{
+                    label: 'Amount of book',
+                    data: info,
+                    backgroundColor: colors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+    }
+</script>
+{% else %}
+<h1 class="text-center text-danger">Login to administator dashboard</h1>
+<form method="post" action ="{{ url_for('signin_quanly') }}">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" name="username" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password">
+    </div>
+    <input class="btn btn-danger mt-3" type="submit" value="Login">
+
+</form>
+{% endif %}
+
+
+{% endblock %}
+

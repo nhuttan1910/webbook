@@ -1,0 +1,55 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Giỏ hàng{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center mt-1">GIỎ HÀNG</h1>
+{% if 'cart' in session and session['cart'] %}
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Tên sản phẩm</th>
+        <th>Đơn giá</th>
+        <th>Số lượng</th>
+        <th></th>
+    </tr>
+    {% for c in session['cart'].values() %}
+    <tr id="sach{{c.id}}">
+        <td>{{ c.id }}</td>
+        <td>{{ c.name }}</td>
+        <td>{{ "{:,.0f}".format(c.price) }} VNĐ</td>
+        <td>
+            <input type="number" value="{{ c.quantity }}" onblur="updateCart({{c.id}}, this)" class="form-control"/>
+        </td>
+        <td>
+            <button class="btn btn-danger" onclick="deleteCart({{c.id}}, this)">&times;</button>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<div class="alert alert-info">
+    <h3>Tổng sản phẩm: <span class="cart-counter">{{ cart.total_quantity }}</span></h3>
+    <h3>Tổng tiền: <span class="cart-amount">{{ "{:,.0f}".format(cart.total_amount) }} </span> VNĐ</h3>
+</div>
+
+{% if current_user.is_authenticated %}
+<div style ="display:flex; justify-content: center ">
+    <button class="btn btn-success">
+        <a href="/info" class = "nav-link text-light" style="text-decoration:none">Đặt Hàng</a>
+    </button>
+</div>
+{% else %}
+<p>Vui lòng <a href="/signin?next=/cart" style="text-decoration: none">đăng nhâp</a> để thanh toán!</p>
+{% endif %}
+
+{% else %}
+<div class="card">
+                <img class="card-img-top" src="https://res.cloudinary.com/dtbjoxzxy/image/upload/v1704256972/cart_oisicz.png" alt="Card image" style="width: 500px; height:auto; margin:10px auto">
+                <div class="card-body">
+                    <p class ="text-center text-danger" style="font-size: 20px">Không có sản phẩm nào trong giỏ hàng !!!</p>
+                </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'qlk/base.html' %}
+
+{% block title %}QLK Add{% endblock %}
+
+{% block content %}
+<div class="alert alert-info">
+    {% for q in qd %}
+    {% if q.name == 'QD1' %}
+    <h5 class="text-center text-danger">Số lượng sách nhập tối thiểu: {{q.value}}</h5>
+    {% endif %}
+    {%if q.name == 'QD2' %}
+    <h5 class="text-center text-danger">Chỉ nhập sách khi số lượng sách ít hơn {{q.value}}</h5>
+    {% endif %}
+    {% endfor %}
+</div>
+<form method="post" action ="{{url_for('qlk_cr')}}" enctype="multipart/form-data">
+    <div class="form-group mt-5">
+        <select name="bookSelect" id="bookSelect" class="form-select" aria-label="Default select example">
+        <option selected>Open this select menu</option>
+            <script>
+                function taoOpt(selectElement, value, text, quantity) {
+                    var option = document.createElement("option");
+                    option.value = value;
+                    option.text = text;
+                    option.data_quatity=quantity;
+                    selectElement.add(option);
+                }
+                var slct = document.getElementById("bookSelect");
+                {% for book in b %}
+                taoOpt(slct, {{book.id}}, "{{book.name}}", {{book.quanti}});
+                {% endfor %}
+            </script>
+    </select>
+
+    </div>
+    <div class="form-group">
+        <h1 class="" id="quantity"></h1>
+        <script>
+            var bookSelect = document.getElementById("bookSelect");
+            bookSelect.addEventListener("change", function() {
+                var selectedOption = bookSelect.options[bookSelect.selectedIndex];
+                var id = selectedOption.getAttribute("value");
+                var view = document.getElementById("quantity");
+                {% for book in b%}
+                if (id == {{book.id}}){
+                    view.textContent = "Số lượng: {{ book.quanti }}";
+                }
+                {% endfor %}
+            });
+        </script>
+    </div>
+    <div class="form-group">
+        <label for="quantity_into">Nhập số lượng</label>
+        <input type="number" class="form-control" id="quantity_into" name="quantity_into">
+    </div>
+    <input class="btn btn-danger mt-3" type="submit" value="Tạo">
+</form>
+
+
+{% endblock %}
